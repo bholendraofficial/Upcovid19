@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +50,8 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -56,8 +59,11 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.piyushrai.upcovid19.Adapter.QuestionAnswerAdapter;
 import com.piyushrai.upcovid19.BuildConfig;
 import com.piyushrai.upcovid19.Location.GpsControl;
+import com.piyushrai.upcovid19.Model.AnswersItem;
+import com.piyushrai.upcovid19.Model.QuestionsItem;
 import com.piyushrai.upcovid19.MySharePrefrence;
 import com.piyushrai.upcovid19.R;
 import com.piyushrai.upcovid19.Retrofit.ApiClient;
@@ -78,6 +84,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.piyushrai.upcovid19.Activity.AppConstants.response;
 
 public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = "UserDetailsActivity";
@@ -128,6 +136,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     private String case_id, ques_id, ans_id, m_ans;
     private ImageView logout;
     private String QuestionAnsDetails;
+    public  JSONObject jsonObjectAnswer=new JSONObject();
     private boolean selected;
     private LinearLayout.LayoutParams params;
     private String user_id;
@@ -138,17 +147,24 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     private View v;
     private List<View> allViewInstance = new ArrayList<View>();
     private JSONObject elem;
+    private  RecyclerView rv_recyclerview;
+    private QuestionAnswerAdapter questionAnswerAdapter;
+    private List<QuestionsItem> answerList=new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
-        caseid = getIntent().getStringExtra("caseid");
-//        recycler_v = findViewById(R.id.recyclers);
+        rv_recyclerview=(RecyclerView)findViewById(R.id.rv_recyclerview);
+
+        questionAnswerAdapter = new QuestionAnswerAdapter(this,answerList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-//        recycler_v.setLayoutManager(mLayoutManager);
+        rv_recyclerview.setLayoutManager(mLayoutManager);
+        rv_recyclerview.setItemAnimator(new DefaultItemAnimator());
+        rv_recyclerview.setAdapter(questionAnswerAdapter);
+
+        caseid = getIntent().getStringExtra("caseid");
         apiInterface = ApiClient.getInstance(this).create(ApiInterface.class);
         sharedPreference = MySharePrefrence.getsharedprefInstance(this);
         hitApi();
@@ -329,95 +345,98 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 //                    String departure_date = name.getString("departure_date");
 //                    String countries_visited = name.getString("countries_visited");
 //                    String passenger_history = name.getString("passenger_history");
-                    jsonArray1 = name.getJSONArray("questions");
-
-
-                    if (jsonArray1 != null) {
-                        for (int i = 0; i < jsonArray1.length(); i++) {
-                            elem = jsonArray1.getJSONObject(i);
-                            final LinearLayout customLL = new LinearLayout(getApplicationContext());
-                            customLL.setOrientation(LinearLayout.HORIZONTAL);
-                            customLL.setLayoutParams(getChildParams());
-                            LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.HORIZONTAL);
-                            TextView tv = new TextView(getApplicationContext());
-
-                            // final LinearLayout custom_view = new LinearLayout(context);
-                            //   custom_view.setOrientation(LinearLayout.VERTICAL);
-
-//                            for(int l=0; l<jsonArray1.length()-1; l++) {
-                            tv = new TextView(getApplicationContext());
-                            tv.setTextSize(15);
-                            tv.setLayoutParams(getParams(700/*ViewGroup.LayoutParams.MATCH_PARENT*/, ViewGroup.LayoutParams.MATCH_PARENT));
-//                                tv.setId(l);
-                            tv.setText(/*(l + 1) + */ elem.getString("question"));
-
-                            lineer.addView(tv);
-
-
-//                                question.setText(elem.getString("question"));
-                            if (elem != null) {
-                                JSONArray prods = elem.getJSONArray("answers");
-                                if (prods != null) {
-//                                        for (int j = 0; j < prods.length(); j++) {
-//                                            JSONObject innerElem = prods.getJSONObject(j);
-//                                            if (innerElem != null) {
-//                                                int cat_id = innerElem.getInt("id");
-//                                                int pos = innerElem.getInt("question_id");
-                                    Spinner tvs = new Spinner(getApplicationContext());
-//                                                for (int lw = 0; lw < prods.length() - 1; lw++) {
-                                    tvs = new Spinner(getApplicationContext());
-                                    tvs.setBackgroundColor(Color.MAGENTA);
-                                    tvs.setFocusable(true);
-                                    tvs.setLayoutParams(getParams(700/*ViewGroup.LayoutParams.MATCH_PARENT*/, ViewGroup.LayoutParams.MATCH_PARENT));
-                                    Type type = new TypeToken<List<AnswerList>>() {
-                                    }.getType();
-                                    sku = new Gson().fromJson(elem.getString("answers"), type);
-
-                                    ArrayAdapter<AnswerList> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, sku);
-                                    tvs.setAdapter(adapter);
-                                    if (lineer.getChildCount() >= 1) {
-                                        lineer.removeViewAt(lineer.getChildCount() - 1);
-                                    }
-                                    customLL.addView(tv);
-                                    customLL.addView(tvs);
-                                    lineer.addView(customLL);
-
-//                                    for (int k = 0; k < lineer.getChildCount(); k++) {
-                                    final Spinner finalTvs = tvs;
-                                    tvs.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-                                        @Override
-                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                            AnswerList dataa = (AnswerList) parent.getItemAtPosition(position);
-//                                                AnswerList dataa = (AnswerList) parent.getSelectedItem(position);
-                                            if (!dataa.getId().equalsIgnoreCase("select")) {
-
-
-
-//                                                    getqns(dataa);
-
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onNothingSelected(AdapterView<?> parent) {
-
-                                        }
-                                    });
-//                                        listBp.add(dataa);
-////                                                            bp.setAnswer();
-//                                        QuestionAnsDetails = new Gson().toJson(listBp);
-//                                    }
-//                                                }
-
-
-//                                        }
-                                }
-                            }
-//                            }
+                    JSONArray jsonQuestions = name.getJSONArray("questions");
+                    if (jsonQuestions != null) {
+                        for (int i=0;i<jsonQuestions.length();i++)
+                        {
+                            answerList.add(new QuestionsItem(jsonQuestions.getJSONObject(i)));
                         }
+                        questionAnswerAdapter.notifyDataSetChanged();
+//                        for (int i = 0; i < jsonArray1.length(); i++) {
+//                            elem = jsonArray1.getJSONObject(i);
+//                            final LinearLayout customLL = new LinearLayout(getApplicationContext());
+//                            customLL.setOrientation(LinearLayout.HORIZONTAL);
+//                            customLL.setLayoutParams(getChildParams());
+//                            LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
+//                                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.HORIZONTAL);
+//                            TextView tv = new TextView(getApplicationContext());
+//
+//                            // final LinearLayout custom_view = new LinearLayout(context);
+//                            //   custom_view.setOrientation(LinearLayout.VERTICAL);
+//
+////                            for(int l=0; l<jsonArray1.length()-1; l++) {
+//                            tv = new TextView(getApplicationContext());
+//                            tv.setTextSize(15);
+//                            tv.setLayoutParams(getParams(700/*ViewGroup.LayoutParams.MATCH_PARENT*/, ViewGroup.LayoutParams.MATCH_PARENT));
+////                                tv.setId(l);
+//                            tv.setText(/*(l + 1) + */ elem.getString("question"));
+//
+//                            lineer.addView(tv);
+//
+//
+////                                question.setText(elem.getString("question"));
+//                            if (elem != null) {
+//                                JSONArray prods = elem.getJSONArray("answers");
+//                                if (prods != null) {
+////                                        for (int j = 0; j < prods.length(); j++) {
+////                                            JSONObject innerElem = prods.getJSONObject(j);
+////                                            if (innerElem != null) {
+////                                                int cat_id = innerElem.getInt("id");
+////                                                int pos = innerElem.getInt("question_id");
+//                                    Spinner tvs = new Spinner(getApplicationContext());
+////                                                for (int lw = 0; lw < prods.length() - 1; lw++) {
+//                                    tvs = new Spinner(getApplicationContext());
+//                                    tvs.setBackgroundColor(Color.MAGENTA);
+//                                    tvs.setFocusable(true);
+//                                    tvs.setLayoutParams(getParams(700/*ViewGroup.LayoutParams.MATCH_PARENT*/, ViewGroup.LayoutParams.MATCH_PARENT));
+//                                    Type type = new TypeToken<List<AnswerList>>() {
+//                                    }.getType();
+//                                    sku = new Gson().fromJson(elem.getString("answers"), type);
+//
+//                                    ArrayAdapter<AnswerList> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, sku);
+//                                    tvs.setAdapter(adapter);
+//                                    if (lineer.getChildCount() >= 1) {
+//                                        lineer.removeViewAt(lineer.getChildCount() - 1);
+//                                    }
+//                                    customLL.addView(tv);
+//                                    customLL.addView(tvs);
+//                                    lineer.addView(customLL);
+//
+////                                    for (int k = 0; k < lineer.getChildCount(); k++) {
+//                                    final Spinner finalTvs = tvs;
+//                                    tvs.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//                                        @Override
+//                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                            AnswerList dataa = (AnswerList) parent.getItemAtPosition(position);
+////                                                AnswerList dataa = (AnswerList) parent.getSelectedItem(position);
+//                                            if (!dataa.getId().equalsIgnoreCase("select")) {
+//
+//
+//
+////                                                    getqns(dataa);
+//
+//                                            }
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onNothingSelected(AdapterView<?> parent) {
+//
+//                                        }
+//                                    });
+////                                        listBp.add(dataa);
+//////                                                            bp.setAnswer();
+////                                        QuestionAnsDetails = new Gson().toJson(listBp);
+////                                    }
+////                                                }
+//
+//
+////                                        }
+//                                }
+//                            }
+////                            }
+//                        }
                     }
 //                    Type type = new TypeToken<List<QuestionModel>>() {
 //                    }.getType();
@@ -436,8 +455,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-//                dialog.dismiss();
             }
         }
 
@@ -601,6 +618,26 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                     e.printStackTrace();
                 }
 //                getqns();
+                JSONArray jsonArray=new JSONArray();
+                for (int i=0;i<answerList.size();i++)
+                {
+                    List<AnswersItem> answer = answerList.get(i).getAnswers();
+                    boolean isYes=answer.get(0).isSelected();
+                    if (isYes)
+                    {
+                        try {
+                            JSONObject jsonObject=new JSONObject();
+                            jsonObject.putOpt("question_id",answer.get(0).getQuestionId());
+                            jsonObject.putOpt("answer_id",answer.get(0).getId());
+                            jsonArray.put(jsonObject);
+                        }catch (Exception ex)
+                        {
+                            ex.printStackTrace();
+                        }
+                    }
+
+                }
+                QuestionAnsDetails=jsonArray.toString();
                 hitSubmitApi();
                 break;
         }

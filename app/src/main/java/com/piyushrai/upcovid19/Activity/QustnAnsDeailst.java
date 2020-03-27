@@ -5,12 +5,6 @@ import java.io.Serializable;
 public class QustnAnsDeailst implements Serializable {
     private String question_id;
     private String answer;
-
-
-
-
-
-
     public String getQuestion_id() {
         return question_id;
     }

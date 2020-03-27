@@ -15,8 +15,6 @@
             android:orientation="horizontal"
             android:weightSum="3">
 
-
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -34,8 +32,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:foregroundGravity="left"
                 android:layout_weight="1"
+                android:foregroundGravity="left"
                 android:padding="@dimen/_10sdp"
                 android:src="@drawable/logout" />
 
@@ -43,13 +41,12 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:background="@drawable/fdsgr"
             android:orientation="vertical">
@@ -419,77 +416,82 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:id="@+id/lineer"
-    android:orientation="vertical"></LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rv_recyclerview"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:visibility="gone"
+                android:id="@+id/lineer"
+                android:orientation="vertical"></LinearLayout>
 
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:orientation="vertical">-->
 
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/recyclers"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:scrollbars="vertical"-->
-<!--                    android:layout_marginTop="20dp" />-->
-<!--            </LinearLayout>-->
+            <!--                <androidx.recyclerview.widget.RecyclerView-->
+            <!--                    android:id="@+id/recyclers"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:scrollbars="vertical"-->
+            <!--                    android:layout_marginTop="20dp" />-->
+            <!--            </LinearLayout>-->
 
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:orientation="horizontal">-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="20dp"-->
+            <!--                android:layout_marginLeft="20dp"-->
+            <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:layout_marginRight="@dimen/_10sdp"-->
-<!--                    android:text="Questions :Fever"></TextView>-->
-<!--                <Spinner-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/_70sdp"-->
-<!--                    android:id="@+id/qspinner"></Spinner>-->
-<!--                <TextView-->
-<!--                    android:id="@+id/question"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content">-->
-<!--                </TextView>-->
-<!--            </LinearLayout>-->
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:textStyle="bold"-->
+            <!--                    android:layout_marginRight="@dimen/_10sdp"-->
+            <!--                    android:text="Questions :Fever"></TextView>-->
+            <!--                <Spinner-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginLeft="@dimen/_70sdp"-->
+            <!--                    android:id="@+id/qspinner"></Spinner>-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/question"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content">-->
+            <!--                </TextView>-->
+            <!--            </LinearLayout>-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:orientation="horizontal">-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="20dp"-->
+            <!--                android:layout_marginLeft="20dp"-->
+            <!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:layout_marginRight="@dimen/_10sdp"-->
-<!--                    android:text="Questions :Cough"></TextView>-->
-<!--                <Spinner-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/_70sdp"-->
-<!--                    android:id="@+id/mqspinner"></Spinner>-->
-<!--                <TextView-->
-<!--                    android:id="@+id/mquestion"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content">-->
-<!--                </TextView>-->
-<!--            </LinearLayout>-->
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:textStyle="bold"-->
+            <!--                    android:layout_marginRight="@dimen/_10sdp"-->
+            <!--                    android:text="Questions :Cough"></TextView>-->
+            <!--                <Spinner-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginLeft="@dimen/_70sdp"-->
+            <!--                    android:id="@+id/mqspinner"></Spinner>-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/mquestion"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content">-->
+            <!--                </TextView>-->
+            <!--            </LinearLayout>-->
 
             <TextView
                 android:layout_width="match_parent"
@@ -517,5 +519,5 @@
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:text="Submit"></Button>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
