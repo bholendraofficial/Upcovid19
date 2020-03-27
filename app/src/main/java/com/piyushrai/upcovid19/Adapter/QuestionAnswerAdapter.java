@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.piyushrai.upcovid19.Activity.UserDetailsActivity;
@@ -30,9 +31,9 @@ public class QuestionAnswerAdapter extends RecyclerView.Adapter<QuestionAnswerAd
     public QuestionAnswerAdapter(UserDetailsActivity activity, List<QuestionsItem> answerList) {
         this.activity=activity;
         this.answerList = answerList;
-        this.answerList = answerList;
     }
 
+    @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -60,10 +61,10 @@ public class QuestionAnswerAdapter extends RecyclerView.Adapter<QuestionAnswerAd
         return answerList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name;
         Spinner sp_spinner;
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             tv_name=view.findViewById(R.id.tv_name);
             sp_spinner=view.findViewById(R.id.sp_spinner);
