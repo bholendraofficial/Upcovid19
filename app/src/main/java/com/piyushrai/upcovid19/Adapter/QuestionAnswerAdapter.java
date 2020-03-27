@@ -46,8 +46,10 @@ public class QuestionAnswerAdapter extends RecyclerView.Adapter<QuestionAnswerAd
         QuestionsItem answer = answerList.get(position);
         holder.tv_name.setText(answer.getQuestion());
         ArrayList<String> spinnerItems=new ArrayList<>();
-        spinnerItems.add("Yes");
-        spinnerItems.add("No");
+        for (int i=0;i<answer.getAnswers().size();i++)
+        {
+            spinnerItems.add(answer.getAnswers().get(i).getAnswer());
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, spinnerItems);
         holder.sp_spinner.setAdapter(adapter);
 

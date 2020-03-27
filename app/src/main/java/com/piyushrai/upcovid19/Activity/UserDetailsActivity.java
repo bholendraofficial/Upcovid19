@@ -622,22 +622,28 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 for (int i=0;i<answerList.size();i++)
                 {
                     List<AnswersItem> answer = answerList.get(i).getAnswers();
-                    boolean isYes=answer.get(0).isSelected();
-                    if (isYes)
+                    for (int a=0;a<answer.size();a++)
                     {
-                        try {
-                            JSONObject jsonObject=new JSONObject();
-                            jsonObject.putOpt("question_id",answer.get(0).getQuestionId());
-                            jsonObject.putOpt("answer_id",answer.get(0).getId());
-                            jsonArray.put(jsonObject);
-                        }catch (Exception ex)
+                        boolean isYes=answer.get(a).isSelected();
+                        if (isYes)
                         {
-                            ex.printStackTrace();
+                            try {
+                                JSONObject jsonObject=new JSONObject();
+                                jsonObject.putOpt("question_id",answer.get(a).getQuestionId());
+                                jsonObject.putOpt("answer_id",answer.get(a).getId());
+                                jsonArray.put(jsonObject);
+                            }catch (Exception ex)
+                            {
+                                ex.printStackTrace();
+                            }
                         }
                     }
 
+
+
                 }
                 QuestionAnsDetails=jsonArray.toString();
+                Log.d("UserDetails",QuestionAnsDetails);
                 hitSubmitApi();
                 break;
         }
