@@ -82,8 +82,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.piyushrai.upcovid19.Activity.AppConstants.response;
 
@@ -135,8 +137,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     private JSONArray jsonArray1;
     private String case_id, ques_id, ans_id, m_ans;
     private ImageView logout;
-    private String QuestionAnsDetails;
-    public  JSONObject jsonObjectAnswer=new JSONObject();
     private boolean selected;
     private LinearLayout.LayoutParams params;
     private String user_id;
@@ -150,6 +150,9 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     private  RecyclerView rv_recyclerview;
     private QuestionAnswerAdapter questionAnswerAdapter;
     private List<QuestionsItem> answerList=new ArrayList<>();
+    private String QuestionAnsDetails;
+    public JSONArray answerJsonArray=new JSONArray();
+    public  HashMap<String,JSONObject> jsonObjectHashMap=new HashMap<>();
 
 
     @Override
@@ -613,36 +616,16 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             case R.id.submit:
                 try {
                     getQAdetails();
-//                    getdetails( v);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                getqns();
-                JSONArray jsonArray=new JSONArray();
-                for (int i=0;i<answerList.size();i++)
-                {
-                    List<AnswersItem> answer = answerList.get(i).getAnswers();
-                    for (int a=0;a<answer.size();a++)
-                    {
-                        boolean isYes=answer.get(a).isSelected();
-                        if (isYes)
-                        {
-                            try {
-                                JSONObject jsonObject=new JSONObject();
-                                jsonObject.putOpt("question_id",answer.get(a).getQuestionId());
-                                jsonObject.putOpt("answer_id",answer.get(a).getId());
-                                jsonArray.put(jsonObject);
-                            }catch (Exception ex)
-                            {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }
-
-
-
+                answerJsonArray=new JSONArray();
+                for (Map.Entry<String, JSONObject> entry : jsonObjectHashMap.entrySet()) {
+                    String key = entry.getKey();
+                    JSONObject value = entry.getValue();
+                    answerJsonArray.put(value);
                 }
-                QuestionAnsDetails=jsonArray.toString();
+                QuestionAnsDetails=answerJsonArray.toString();
                 Log.d("UserDetails",QuestionAnsDetails);
                 hitSubmitApi();
                 break;

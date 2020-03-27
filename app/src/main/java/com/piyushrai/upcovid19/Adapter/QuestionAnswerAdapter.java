@@ -72,14 +72,10 @@ public class QuestionAnswerAdapter extends RecyclerView.Adapter<QuestionAnswerAd
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                    try {
-                       String isYes = parent.getItemAtPosition(pos).toString();
-                       if (isYes.equalsIgnoreCase("yes"))
-                       {
-                           answerList.get(getAdapterPosition()).getAnswers().get(pos).setSelected(true);
-                       }else
-                       {
-                           answerList.get(getAdapterPosition()).getAnswers().get(pos).setSelected(false);
-                       }
+                       JSONObject jsonObject=new JSONObject();
+                       jsonObject.putOpt("question_id",answerList.get(getAdapterPosition()).getAnswers().get(pos).getQuestionId());
+                       jsonObject.putOpt("answer_id",answerList.get(getAdapterPosition()).getAnswers().get(pos).getId());
+                       activity.jsonObjectHashMap.put(answerList.get(getAdapterPosition()).getQuestion(),jsonObject);
 
                    }catch (Exception ex)
                    {
